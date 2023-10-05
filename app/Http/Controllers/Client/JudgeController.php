@@ -8,6 +8,7 @@ use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use App\Http\Requests\JudgeRequest;
 use App\Http\Controllers\Controller;
+use App\Jobs\SendEmailToJudgeJob;
 
 class JudgeController extends Controller
 {
@@ -44,6 +45,8 @@ class JudgeController extends Controller
 
         //send email
         //to do send an email to the judge
+        SendEmailToJudgeJob::dispatch($judge)->delay(now()->addSeconds(5));
+
         return redirect()->to('client/judges')->with('success', 'New judge has been added.');
     }
 

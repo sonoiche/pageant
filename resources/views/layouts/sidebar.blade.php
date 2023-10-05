@@ -10,9 +10,11 @@
     <div class="sidebar">
         <!-- Sidebar user (optional) -->
         <div class="user-panel mt-3 pb-3 mb-3 d-flex">
+            @if(auth()->user()->display_photo)
             <div class="image">
                 <img src="{{ auth()->user()->display_photo }}" class="img-circle elevation-2" alt="User Image" />
             </div>
+            @endif
             <div class="info">
                 <a href="#" class="d-block">{{ auth()->user()->fullname }}</a>
             </div>
@@ -21,12 +23,22 @@
         <!-- Sidebar Menu -->
         <nav class="mt-2">
             <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
+                @if(auth()->user()->display_photo)
                 <li class="nav-item">
                     <a href="{{ url('home') }}" class="nav-link">
                         <i class="nav-icon fas fa-tachometer-alt"></i>
                         <p>Dashboard</p>
                     </a>
                 </li>
+                @else
+                <li class="nav-item">
+                    <a href="{{ url('judge/contest') }}" class="nav-link">
+                        <i class="nav-icon fas fa-tachometer-alt"></i>
+                        <p>Dashboard</p>
+                    </a>
+                </li>
+                @endif
+                @if(auth()->user()->display_photo)
                 <li class="nav-item">
                     <a href="#" class="nav-link">
                         <i class="nav-icon fas fa-star"></i>
@@ -46,6 +58,12 @@
                             <a href="{{ url('client/contests') }}" class="nav-link">
                                 <i class="far fa-circle nav-icon"></i>
                                 <p>List of Contest</p>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="{{ url('client/participants') }}" class="nav-link">
+                                <i class="far fa-circle nav-icon"></i>
+                                <p>List of Participants</p>
                             </a>
                         </li>
                     </ul>
@@ -113,6 +131,7 @@
                         </li>
                     </ul>
                 </li>
+                @endif
                 <li class="nav-item">
                     <a href="{{ route('logout') }}" class="nav-link" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
                         <i class="nav-icon fas fa-sign-out-alt"></i>

@@ -39,14 +39,14 @@ class ContestController extends Controller
             $file  = $request->file('logo');
             $logo = time().'.'.$file->getClientOriginalExtension();
 
-            $path = Storage::disk('s3')->putFileAs(
+            $path = Storage::disk('upcloud')->putFileAs(
                 'pageant/uploads/contest',
                 $file,
                 $logo,
                 'public'
             );
             
-            $contest->logo = Storage::disk('s3')->url($path);
+            $contest->logo = Storage::disk('upcloud')->url($path);
         }
 
         $contest->save();
@@ -61,7 +61,7 @@ class ContestController extends Controller
             case 'deleteImage':
                 $contest = Contest::find($id);
                 if(isset($contest->logo)) {
-                    Storage::disk('s3')->delete('pageant/uploads/contest/'.basename($contest->logo));
+                    Storage::disk('upcloud')->delete('pageant/uploads/contest/'.basename($contest->logo));
                 }
                 $contest->logo = null;
                 $contest->save();
@@ -91,14 +91,14 @@ class ContestController extends Controller
             $file  = $request->file('logo');
             $logo = time().'.'.$file->getClientOriginalExtension();
 
-            $path = Storage::disk('s3')->putFileAs(
+            $path = Storage::disk('upcloud')->putFileAs(
                 'pageant/uploads/contest',
                 $file,
                 $logo,
                 'public'
             );
             
-            $contest->logo = Storage::disk('s3')->url($path);
+            $contest->logo = Storage::disk('upcloud')->url($path);
         }
 
         $contest->save();
@@ -110,7 +110,7 @@ class ContestController extends Controller
     {
         $contest = Contest::find($id);
         if(isset($contest->logo)) {
-            Storage::disk('s3')->delete('pageant/uploads/contest/'.basename($contest->logo));
+            Storage::disk('upcloud')->delete('pageant/uploads/contest/'.basename($contest->logo));
         }
         $contest->delete();
 

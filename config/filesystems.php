@@ -56,6 +56,16 @@ return [
             'throw' => false,
         ],
 
+        'upcloud' => [
+            'driver' => 's3',
+            'key' => env('UPCLOUD_KEY'),
+            'secret' => env('UPCLOUD_SECRET'),
+            'endpoint' => env('UPCLOUD_ENDPOINT'),
+            'region' => env('UPCLOUD_REGION'),
+            'bucket' => env('UPCLOUD_BUCKET'),
+            'visibility' => 'public'
+        ],
+
     ],
 
     /*

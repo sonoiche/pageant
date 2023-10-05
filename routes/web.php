@@ -1,8 +1,12 @@
 <?php
 
+use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Client\ContestController;
 use App\Http\Controllers\Client\CriteriaController;
 use App\Http\Controllers\Client\JudgeController;
+use App\Http\Controllers\Client\ParticipantController;
+use App\Http\Controllers\Judge\ContestController as JudgeContestController;
+use App\Http\Controllers\Judge\LoginController as JudgeLoginController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -17,7 +21,7 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', function () {
-    return view('welcome');
+    return view('mails.template');
 });
 
 Auth::routes();
@@ -28,4 +32,11 @@ Route::prefix('client')->middleware(['auth:web'])->group( function () {
     Route::resource('contests', ContestController::class);
     Route::resource('judges', JudgeController::class);
     Route::resource('criteria', CriteriaController::class);
+    Route::resource('participants', ParticipantController::class);
+});
+
+Route::resource('authenticate/judge', JudgeLoginController::class);
+
+Route::prefix('judge')->middleware(['auth:judge'])->group( function() {
+    Route::resource('contest', JudgeContestController::class);
 });

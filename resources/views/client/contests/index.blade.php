@@ -43,6 +43,7 @@
                                     <a class="dropdown-item" href="{{ url('client/contests', $item->id) }}/edit">Edit</a>
                                     <a class="dropdown-item" href="{{ url('client/judges/create') }}?contest_id={{ $item->id }}">Add Judges</a>
                                     <a class="dropdown-item" href="{{ url('client/criteria/create') }}?contest_id={{ $item->id }}">Add Criteria</a>
+                                    <a class="dropdown-item" href="{{ url('client/participants/create') }}?contest_id={{ $item->id }}">Add Participant</a>
                                     <a class="dropdown-item" href="javascript:;" onclick="removeContest({{ $item->id }})">Delete</a>
                                 </div>
                             </div>

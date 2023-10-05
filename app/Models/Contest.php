@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Carbon\Carbon;
+use App\Models\Participant;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
@@ -22,5 +23,10 @@ class Contest extends Model
         }
 
         return '';
+    }
+
+    public function contest_participants()
+    {
+        return $this->hasMany(Participant::class, 'contest_id');
     }
 }
