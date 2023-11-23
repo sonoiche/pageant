@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Client;
 
 use App\Models\Contest;
+use App\Models\Criteria;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
@@ -112,6 +113,9 @@ class ContestController extends Controller
         if(isset($contest->logo)) {
             Storage::disk('upcloud')->delete('pageant/uploads/contest/'.basename($contest->logo));
         }
+
+        Criteria::where('contest_id', $id)->delete();
+
         $contest->delete();
 
         $data['success'] = 'Contest has been deleted.';
