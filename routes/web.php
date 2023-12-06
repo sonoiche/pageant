@@ -21,14 +21,15 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', function () {
-    return view('mails.template');
+    // return view('mails.template');
+    return redirect()->to('login');
 });
 
 Auth::routes();
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 
-Route::prefix('client')->middleware(['auth:web'])->group( function () {
+Route::prefix('client')->middleware(['auth:web'])->group(function () {
     Route::resource('contests', ContestController::class);
     Route::resource('judges', JudgeController::class);
     Route::resource('criteria', CriteriaController::class);
@@ -37,6 +38,6 @@ Route::prefix('client')->middleware(['auth:web'])->group( function () {
 
 Route::resource('authenticate/judge', JudgeLoginController::class);
 
-Route::prefix('judge')->middleware(['auth:judge'])->group( function() {
+Route::prefix('judge')->middleware(['auth:judge'])->group(function () {
     Route::resource('contest', JudgeContestController::class);
 });
