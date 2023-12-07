@@ -66,6 +66,6 @@ class Judge extends Authenticatable
             return $index[0];
         }
 
-        return '';
+        return 0;
     }
 }
