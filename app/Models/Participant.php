@@ -9,17 +9,17 @@ use Illuminate\Database\Eloquent\Model;
 class Participant extends Model
 {
     use HasFactory;
-    
+
     protected $table = "participants";
     protected $guarded = [];
-    protected $appends = ['fullname','display_photo','complete_address','age','overall_points','birthdate_display'];
+    protected $appends = ['fullname', 'display_photo', 'complete_address', 'age', 'overall_points', 'birthdate_display'];
 
     public function getFullnameAttribute()
     {
         $fname = $this->attributes['fname'] ?? '';
         $lname = $this->attributes['lname'] ?? '';
-        if($fname && $lname) {
-            return $fname.' '.$lname;
+        if ($fname && $lname) {
+            return $fname . ' ' . $lname;
         }
 
         return '';
@@ -29,9 +29,9 @@ class Participant extends Model
     {
         $fname = $this->attributes['fname'] ?? '';
         $lname = $this->attributes['lname'] ?? '';
-        if($fname && $lname) {
-            $fullname = $fname.' '.$lname;
-            return 'https://ui-avatars.com/api/?name='.$fullname.'&background=random';
+        if ($fname && $lname) {
+            $fullname = $fname . ' ' . $lname;
+            return 'https://ui-avatars.com/api/?name=' . $fullname . '&background=random';
         }
 
         return '';
@@ -41,8 +41,8 @@ class Participant extends Model
     {
         $address = $this->attributes['address'] ?? '';
         $city = $this->attributes['city'] ?? '';
-        if($address && $city) {
-            return $address. ' '.$city;
+        if ($address && $city) {
+            return $address . ' ' . $city;
         }
 
         return '';
@@ -51,7 +51,7 @@ class Participant extends Model
     public function getAgeAttribute()
     {
         $birthdate = $this->attributes['birthdate'] ?? '';
-        if($birthdate) {
+        if ($birthdate) {
             return Carbon::parse($birthdate)->age;
         }
 
@@ -61,7 +61,7 @@ class Participant extends Model
     public function getBirthdateDisplayAttribute()
     {
         $birthdate = $this->attributes['birthdate'] ?? '';
-        if($birthdate) {
+        if ($birthdate) {
             return Carbon::parse($birthdate)->format('F d, Y');
         }
 
@@ -79,7 +79,8 @@ class Participant extends Model
             $total += $this->getFinalPoints($item->slug_name);
         }
 
-        return ($total / $totalPercentage) * 100;
+        $final = ($total / $totalPercentage) * 100;
+        return number_format((float) $final, 2, '.', '');
     }
 
     public function getOverallPoints($judge_id, $contest_id)
@@ -88,14 +89,14 @@ class Participant extends Model
             ->where('contest_id', $contest_id)
             ->first();
 
-        if(isset($points->id)) {
+        if (isset($points->id)) {
             $criterias  = json_decode($points->overall_points, true);
             $overall    = 0;
             foreach ($criterias as $item) {
                 $overall += array_values($item)[0] ?? 0;
             }
 
-            return $overall.'%';
+            return $overall . '%';
         }
 
         return '';
@@ -120,7 +121,7 @@ class Participant extends Model
             $index    = array_column($points, $criteria);
             $total   += $index[0];
         }
-        
+
         return $total;
     }
 }
