@@ -14,7 +14,8 @@
                         @foreach ($criterias as $item)
                         <div class="form-group">
                             <label for="{{ $item->slug_name }}">{{ $item->name }} - {{ $item->percentage }}%</label>
-                            <input type="number" class="form-control" id="{{ $item->slug_name }}" name="{{ $item->slug_name }}" />
+                            <input type="number" class="form-control" id="{{ $item->slug_name }}" name="{{ $item->slug_name }}" min="1" max="{{ $item->percentage }}" onblur="checkPoints('{{ $item->slug_name }}',{{ $item->percentage }})" />
+                            <span class="text-danger" style="font-size: 13px; display: none" id="error-{{ $item->slug_name }}">Value must be less than or equal to {{ $item->percentage }}</span>
                         </div>
                         @endforeach
                     </div>
@@ -31,4 +32,16 @@
         </div>
     </div>
 </section>
+@endsection
+
+@section('page-js')
+<script>
+function checkPoints(idname, percentage) {
+    var points = $('#'+idname).val();
+    var isActive = false;
+    if(points && points > percentage) {
+        $('#error-'+idname).show();
+    }
+}
+</script>
 @endsection

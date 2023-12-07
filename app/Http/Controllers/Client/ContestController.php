@@ -8,6 +8,8 @@ use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\ContestRequest;
+use App\Models\Judge;
+use App\Models\Participant;
 use Illuminate\Support\Facades\Storage;
 
 class ContestController extends Controller
@@ -34,11 +36,11 @@ class ContestController extends Controller
         $contest->date_held     = $request['date_held'];
         $contest->status        = $request['status'];
         $contest->user_id       = auth()->user()->id;
-        $contest->link          = config('app.url').'/contests/'.$contest_title.'/'.Str::random(15);
+        $contest->link          = config('app.url') . '/contests/' . $contest_title . '/' . Str::random(15);
 
-        if(isset($request['logo']) && $request->has('logo')) {
+        if (isset($request['logo']) && $request->has('logo')) {
             $file  = $request->file('logo');
-            $logo = time().'.'.$file->getClientOriginalExtension();
+            $logo = time() . '.' . $file->getClientOriginalExtension();
 
             $path = Storage::disk('upcloud')->putFileAs(
                 'pageant/uploads/contest',
@@ -46,7 +48,7 @@ class ContestController extends Controller
                 $logo,
                 'public'
             );
-            
+
             $contest->logo = Storage::disk('upcloud')->url($path);
         }
 
@@ -61,15 +63,15 @@ class ContestController extends Controller
         switch ($what) {
             case 'deleteImage':
                 $contest = Contest::find($id);
-                if(isset($contest->logo)) {
-                    Storage::disk('upcloud')->delete('pageant/uploads/contest/'.basename($contest->logo));
+                if (isset($contest->logo)) {
+                    Storage::disk('upcloud')->delete('pageant/uploads/contest/' . basename($contest->logo));
                 }
                 $contest->logo = null;
                 $contest->save();
 
                 return response()->json(200);
                 break;
-            
+
             default:
                 $data['contest'] = Contest::find($id);
                 return view('client.contests.edit', $data);
@@ -88,9 +90,9 @@ class ContestController extends Controller
         $contest->status        = $request['status'];
         $contest->user_id       = auth()->user()->id;
 
-        if(isset($request['logo']) && $request->has('logo')) {
+        if (isset($request['logo']) && $request->has('logo')) {
             $file  = $request->file('logo');
-            $logo = time().'.'.$file->getClientOriginalExtension();
+            $logo = time() . '.' . $file->getClientOriginalExtension();
 
             $path = Storage::disk('upcloud')->putFileAs(
                 'pageant/uploads/contest',
@@ -98,7 +100,7 @@ class ContestController extends Controller
                 $logo,
                 'public'
             );
-            
+
             $contest->logo = Storage::disk('upcloud')->url($path);
         }
 
@@ -110,11 +112,13 @@ class ContestController extends Controller
     public function destroy($id)
     {
         $contest = Contest::find($id);
-        if(isset($contest->logo)) {
-            Storage::disk('upcloud')->delete('pageant/uploads/contest/'.basename($contest->logo));
+        if (isset($contest->logo)) {
+            Storage::disk('upcloud')->delete('pageant/uploads/contest/' . basename($contest->logo));
         }
 
         Criteria::where('contest_id', $id)->delete();
+        Judge::where('contest_id', $id)->delete();
+        Participant::where('contest_id', $id)->delete();
 
         $contest->delete();
 

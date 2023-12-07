@@ -18,7 +18,6 @@
                     <table class="table table-hover text-nowrap" id="judge-table">
                         <thead>
                             <tr>
-                                <th style="width: 3%" class="text-center">#</th>
                                 <th style="width: 15%">Fullname</th>
                                 <th style="width: 15%">Email</th>
                                 <th style="width: 20%">Contest</th>
@@ -29,7 +28,6 @@
                         <tbody>
                             @foreach ($judges as $key => $item)
                             <tr>
-                                <td class="text-center">{{ $key+1 }}</td>
                                 <td>{{ $item->fullname }}</td>
                                 <td>{{ $item->email }}</td>
                                 <td>{{ isset($item->contest) ? $item->contest->title : '' }}</td>

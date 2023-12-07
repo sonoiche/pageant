@@ -14,6 +14,17 @@
                         </div>
                     </div>
                 </div>
+                <div class="filter">
+                    <form action="{{ url('client/participants') }}" method="get" id="filter-submit">
+                        <select name="contest_id" id="contest_id" class="custom-select">
+                            <option value="">All Contests</option>
+                            @foreach ($contests as $item)
+                            <option value="{{ $item->id }}" {{ (isset($contest_id) && $contest_id == $item->id) ? 'selected' : '' }}>{{ $item->title }}</option>
+                            @endforeach
+                        </select>
+                        <input type="hidden" name="is_contest" value="1">
+                    </form>
+                </div>
                 <div class="card-body table-responsive p-0">
                     <table class="table table-hover text-nowrap" id="participant-table">
                         <thead>
@@ -78,6 +89,12 @@
     justify-content: end;
     margin-right: 15px !important;
 }
+.filter {
+    position: absolute;
+    top: 70px;
+    left: 20px;
+    z-index: 100;
+}
 </style>
 @endsection
 
@@ -101,6 +118,11 @@ $(document).ready(function () {
         ],
         order: [[1, 'asc']]
     }).buttons().container().appendTo('#judge-table_wrapper .col-md-6:eq(0)');
+
+    $('#contest_id').change(function (e) { 
+        e.preventDefault();
+        $('#filter-submit').submit();
+    });
 });
 
 function removeParticipant(id) {

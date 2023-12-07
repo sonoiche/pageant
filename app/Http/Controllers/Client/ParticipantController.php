@@ -13,9 +13,19 @@ use App\Models\Judge;
 
 class ParticipantController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        $data['participants'] = Participant::latest()->get();
+        $is_contest             = $request['is_contest'];
+        $contest_id             = $data['contest_id'] = $request['contest_id'];
+        $today = Carbon::now()->format('Y-m-d');
+        $data['contests']   = Contest::where('status', "Active")->where('date_held', '>=', $today)->orderBy('title')->get();
+        if ($is_contest) {
+            $data['participants']   = Participant::where('contest_id', $contest_id)->latest()->get();
+        } else {
+            $data['participants']   = Participant::latest()->get();
+        }
+
+
         return view('client.participants.index', $data);
     }
 
@@ -25,7 +35,7 @@ class ParticipantController extends Controller
         $contest_id         = $request['contest_id'];
         $data['contest']    = [];
         $data['contests']   = Contest::where('status', 'Active')->orderBy('title')->get();
-        if(isset($contest_id)) {
+        if (isset($contest_id)) {
             $data['contest'] = Contest::find($contest_id);
         }
         return view('client.participants.create', $data);
@@ -45,9 +55,9 @@ class ParticipantController extends Controller
         $participant->gender            = $request['gender'];
         $participant->status            = $request['status'];
 
-        if(isset($request['photo']) && $request->has('photo')) {
+        if (isset($request['photo']) && $request->has('photo')) {
             $file  = $request->file('photo');
-            $photo = time().'.'.$file->getClientOriginalExtension();
+            $photo = time() . '.' . $file->getClientOriginalExtension();
 
             $path = Storage::disk('upcloud')->putFileAs(
                 'pageant/uploads/participants',
@@ -55,7 +65,7 @@ class ParticipantController extends Controller
                 $photo,
                 'public'
             );
-            
+
             $participant->photo = Storage::disk('upcloud')->url($path);
         }
 
@@ -86,9 +96,9 @@ class ParticipantController extends Controller
         $participant->gender            = $request['gender'];
         $participant->status            = $request['status'];
 
-        if(isset($request['photo']) && $request->has('photo')) {
+        if (isset($request['photo']) && $request->has('photo')) {
             $file  = $request->file('photo');
-            $photo = time().'.'.$file->getClientOriginalExtension();
+            $photo = time() . '.' . $file->getClientOriginalExtension();
 
             $path = Storage::disk('upcloud')->putFileAs(
                 'pageant/uploads/participants',
@@ -96,7 +106,7 @@ class ParticipantController extends Controller
                 $photo,
                 'public'
             );
-            
+
             $participant->photo = Storage::disk('upcloud')->url($path);
         }
 
@@ -116,8 +126,8 @@ class ParticipantController extends Controller
     public function destroy($id)
     {
         $participant = Participant::find($id);
-        if(isset($participant->photo)) {
-            Storage::disk('upcloud')->delete('pageant/uploads/participants/'.basename($participant->photo));
+        if (isset($participant->photo)) {
+            Storage::disk('upcloud')->delete('pageant/uploads/participants/' . basename($participant->photo));
         }
         $participant->delete();
 
