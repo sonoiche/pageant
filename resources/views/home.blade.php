@@ -125,3 +125,81 @@
     </div>
 </section>
 @endsection
+
+@section('page-css')
+<link rel="stylesheet" href="{{ url('assets/plugins/datatables-bs4/css/dataTables.bootstrap4.min.css') }}">
+<link rel="stylesheet" href="{{ url('assets/plugins/datatables-responsive/css/responsive.bootstrap4.min.css') }}">
+<link rel="stylesheet" href="{{ url('assets/plugins/datatables-buttons/css/buttons.bootstrap4.min.css') }}">
+<style>
+.dt-buttons {
+    margin: 10px 0 5px 10px;
+}
+.dataTables_filter {
+    position: absolute;
+    top: 25%;
+    right: 15px;
+}
+.dataTables_info {
+    margin: 10px 0 5px 10px;
+}
+.dataTables_paginate {
+    display: flex;
+    justify-content: end;
+    margin-right: 15px !important;
+}
+</style>
+@endsection
+
+@section('page-js')
+@include('layouts.components.datatable');
+<script>
+$(document).ready(function () {
+    $("#judge-table").DataTable({
+        "responsive": true, 
+        "lengthChange": false, 
+        "autoWidth": false,
+        buttons: [
+            { 
+                extend: "print", 
+                title: "List of Judges", 
+                exportOptions: { columns: [0, 1, 2, 3, 4] }
+            }
+        ],
+        columnDefs: [
+            { orderable: false, targets: [0, 3, 4, 5] }
+        ],
+        order: [[1, 'asc']]
+    }).buttons().container().appendTo('#judge-table_wrapper .col-md-6:eq(0)');
+});
+
+function removeJudge(id) {
+    Swal.fire({
+        title: 'Are you sure?',
+        text: "You won't be able to revert this!",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Yes, delete it!'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            $.ajax({
+                type: "DELETE",
+                url: "{{ url('client/judges') }}/"+id,
+                dataType: "json",
+                success: function (response) {
+                    Swal.fire(
+                        'Deleted!',
+                        response.success,
+                        'success'
+                    );
+                    setTimeout(() => {
+                        location.reload();
+                    }, 2000);
+                }
+            });
+        }
+    })
+}
+</script>
+@endsection
