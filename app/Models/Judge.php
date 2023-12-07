@@ -19,8 +19,8 @@ class Judge extends Authenticatable
         $fname = $this->attributes['fname'] ?? '';
         $lname = $this->attributes['lname'] ?? '';
 
-        if($fname && $lname) {
-            return $fname.' '.$lname;
+        if ($fname && $lname) {
+            return $fname . ' ' . $lname;
         }
 
         return '';
@@ -59,9 +59,13 @@ class Judge extends Authenticatable
             ->where('participant_id', $participant->id)
             ->first();
 
-        $points   = json_decode($result->overall_points, true);
-        $index    = array_column($points, $criteria);
-        
-        return $index[0];
+        if (isset($result->overall_points)) {
+            $points   = json_decode($result->overall_points, true);
+            $index    = array_column($points, $criteria);
+
+            return $index[0];
+        }
+
+        return '';
     }
 }
