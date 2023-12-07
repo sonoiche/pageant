@@ -154,25 +154,19 @@
 @include('layouts.components.datatable');
 <script>
 $(document).ready(function () {
-    $("#judge-table").DataTable({
+    $("#contest-table").DataTable({
         "responsive": true, 
         "lengthChange": false, 
         "autoWidth": false,
-        buttons: [
-            { 
-                extend: "print", 
-                title: "List of Judges", 
-                exportOptions: { columns: [0, 1, 2, 3, 4] }
-            }
-        ],
+        "buttons": ["print"],
         columnDefs: [
-            { orderable: false, targets: [0, 3, 4, 5] }
+            { orderable: false, targets: [0, 3, 6] }
         ],
-        order: [[1, 'asc']]
-    }).buttons().container().appendTo('#judge-table_wrapper .col-md-6:eq(0)');
+        order: [[4, 'desc']]
+    }).buttons().container().appendTo('#contest-table_wrapper .col-md-6:eq(0)');
 });
 
-function removeJudge(id) {
+function removeContest(id) {
     Swal.fire({
         title: 'Are you sure?',
         text: "You won't be able to revert this!",
@@ -185,7 +179,7 @@ function removeJudge(id) {
         if (result.isConfirmed) {
             $.ajax({
                 type: "DELETE",
-                url: "{{ url('client/judges') }}/"+id,
+                url: "{{ url('client/contests') }}/"+id,
                 dataType: "json",
                 success: function (response) {
                     Swal.fire(
