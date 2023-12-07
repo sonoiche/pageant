@@ -5,6 +5,7 @@ use App\Http\Controllers\Client\ContestController;
 use App\Http\Controllers\Client\CriteriaController;
 use App\Http\Controllers\Client\JudgeController;
 use App\Http\Controllers\Client\ParticipantController;
+use App\Http\Controllers\Client\UserController;
 use App\Http\Controllers\Judge\ContestController as JudgeContestController;
 use App\Http\Controllers\Judge\LoginController as JudgeLoginController;
 use Illuminate\Support\Facades\Route;
@@ -34,6 +35,7 @@ Route::prefix('client')->middleware(['auth:web'])->group(function () {
     Route::resource('judges', JudgeController::class);
     Route::resource('criteria', CriteriaController::class);
     Route::resource('participants', ParticipantController::class);
+    Route::resource('settings', UserController::class);
 });
 
 Route::resource('authenticate/judge', JudgeLoginController::class);
