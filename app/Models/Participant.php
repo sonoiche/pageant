@@ -79,8 +79,12 @@ class Participant extends Model
             $total += $this->getFinalPoints($item->slug_name);
         }
 
-        $final = ($total / $totalPercentage) * 100;
-        return number_format((float) $final, 2, '.', '');
+        if ($totalPercentage <> 0) {
+            $final = ($total / $totalPercentage) * 100;
+            return number_format((float) $final, 2, '.', '');
+        }
+
+        return 0;
     }
 
     public function getOverallPoints($judge_id, $contest_id)
