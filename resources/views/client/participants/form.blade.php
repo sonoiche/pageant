@@ -8,6 +8,8 @@
             @endforeach
         </select>
     </div>
+    @else
+    <input type="hidden" name="contest_id" value="{{ $contest->id }}" />
     @endif
     <div class="form-group">
         <label for="fname">First Name</label>
