@@ -29,7 +29,6 @@
                     <table class="table table-hover text-nowrap" id="participant-table">
                         <thead>
                             <tr>
-                                <th style="width: 3%" class="text-center">#</th>
                                 <th style="width: 15%">Fullname</th>
                                 <th style="width: 20%">Contest</th>
                                 <th style="width: 15%">Contact Number</th>
@@ -41,7 +40,6 @@
                         <tbody>
                             @foreach ($participants as $key => $item)
                             <tr>
-                                <td class="text-center">{{ $key+1 }}</td>
                                 <td><a href="{{ url('client/participants', $item->id) }}">{{ $item->fullname }}</a></td>
                                 <td>{{ isset($item->contest) ? $item->contest->title : '' }}</td>
                                 <td>{{ $item->contact_number }}</td>
@@ -91,8 +89,8 @@
 }
 .filter {
     position: absolute;
-    top: 70px;
-    left: 20px;
+    top: 66px;
+    left: 80px;
     z-index: 100;
 }
 </style>
@@ -116,8 +114,8 @@ $(document).ready(function () {
         columnDefs: [
             { orderable: false, targets: [0, 3, 4, 5] }
         ],
-        order: [[1, 'asc']]
-    }).buttons().container().appendTo('#judge-table_wrapper .col-md-6:eq(0)');
+        order: [[4, 'desc']]
+    }).buttons().container().appendTo('#participant-table_wrapper .col-md-6:eq(0)');
 
     $('#contest_id').change(function (e) { 
         e.preventDefault();

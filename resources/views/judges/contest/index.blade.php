@@ -29,7 +29,7 @@
                         <td>{{ $item->age }}</td>
                         <td>{{ $item->complete_address }}</td>
                         <td class="text-center">
-                            <a href="{{ url('judge/contest', $item->id) }}?what=single">{{ $item->getOverallPoints($judge->id, $contest->id) }}</a>
+                            <a href="{{ url('judge/contest', $item->id) }}?what=single">{{ $item->getOverallPoints($judge->id, $contest->id, $item->id) }}</a>
                         </td>
                         <td class="text-center">
                             <a href="{{ url('judge/contest/create') }}?participant_id={{ $item->id }}" class="btn btn-outline-primary">Generate Points</a>

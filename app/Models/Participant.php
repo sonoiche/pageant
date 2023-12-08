@@ -87,10 +87,11 @@ class Participant extends Model
         return 0;
     }
 
-    public function getOverallPoints($judge_id, $contest_id)
+    public function getOverallPoints($judge_id, $contest_id, $id)
     {
         $points = ParticipantPoint::where('judge_id', $judge_id)
             ->where('contest_id', $contest_id)
+            ->where('participant_id', $id)
             ->first();
 
         if (isset($points->id)) {
@@ -103,7 +104,7 @@ class Participant extends Model
             return $overall . '%';
         }
 
-        return '';
+        return '0%';
     }
 
     public function contest()

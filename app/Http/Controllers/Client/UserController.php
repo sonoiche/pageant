@@ -22,7 +22,7 @@ class UserController extends Controller
         $user->mname = $request['mname'];
         $user->lname = $request['lname'];
         if (isset($request['password'])) {
-            $user->password = $request['password'];
+            $user->password = bcrypt($request['password']);
         }
         $user->save();
 

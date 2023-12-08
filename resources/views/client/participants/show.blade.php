@@ -40,7 +40,7 @@
                     <h3 class="card-title">Points Tally</h3>
                 </div>
                 <div class="card-body">
-                    @foreach ($judges as $judge)
+                    @forelse ($judges as $judge)
                     <div class="mb-3">
                         <h5>{{ $judge->fullname }}</h5>
                     </div>
@@ -63,7 +63,20 @@
                         </tbody>
                     </table>
                     <br><br>
-                    @endforeach
+                    @empty
+                    <div class="mb-3 text-center">
+                        <h4>No data available</h4>
+                    </div>
+                    @endforelse
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4 col-sm-12">
+            <div class="card card-primary card-outline">
+                <div class="card-body">
+                    <div class="text-center">
+                        <img src="{{ $participant->photo }}" style="width: 80%; object-fit: cover">
+                    </div>
                 </div>
             </div>
         </div>
