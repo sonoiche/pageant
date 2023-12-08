@@ -22,7 +22,7 @@ class ContestController extends Controller
             ->where('status', 'Active')
             ->where('id', $user->contest_id)
             ->first();
-        
+
         return view('judges.contest.index', $data);
     }
 
@@ -31,6 +31,7 @@ class ContestController extends Controller
         $participant_id = $request['participant_id'];
         $data['participant'] = $participant = Participant::find($participant_id);
         $data['criterias']   = Criteria::where('contest_id', $participant->contest_id)->get();
+        $data['contest']     = Contest::find($participant->contest_id);
         return view('judges.contest.create', $data);
     }
 
@@ -64,10 +65,11 @@ class ContestController extends Controller
     {
         $what = $request['what'];
         $participant = $data['participant'] = Participant::find($id);
+        $data['contest']     = Contest::find($participant->contest_id);
 
         switch ($what) {
             case 'single':
-                
+
                 $criterias      = Criteria::where('contest_id', $participant->contest_id)->get();
                 $arr_criterias  = [];
                 $total          = 0;
@@ -86,9 +88,9 @@ class ContestController extends Controller
                 $data['total'] = $total;
                 $data['total_percent'] = $total_percent;
                 return view('judges.contest.show', $data);
-                
+
                 break;
-            
+
             default:
                 # code...
                 break;
@@ -103,9 +105,13 @@ class ContestController extends Controller
             ->where('participant_id', $participant->id)
             ->first();
 
-        $points   = json_decode($result->overall_points, true);
-        $index    = array_column($points, $criteria);
-        
-        return $index[0];
+        if (isset($result->overall_points)) {
+            $points   = json_decode($result->overall_points, true);
+            $index    = array_column($points, $criteria);
+
+            return $index[0];
+        }
+
+        return 0;
     }
 }
